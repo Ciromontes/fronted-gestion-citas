@@ -14,6 +14,7 @@ import DashboardRecepcionista from "./components/DashboardRecepcionista";
 import DashboardAdmin from "./components/DashboardAdmin";
 import HistoriasPage from "./components/HistoriasPage";
 import TablaUsuarios from "./components/TablaUsuarios";
+import CitasHoyPage from "./components/CitasHoyPage";
 
 // Ruta protegida por token
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
@@ -33,7 +34,7 @@ const ResolveDashboard = () => {
     const { rol } = useAuth();
     const r = (rol ?? "").toUpperCase();
     if (r === "CLIENTE") return <Navigate to="/cliente/mascotas" />;
-    if (r === "VETERINARIO") return <Navigate to="/veterinario/agenda" />;
+    if (r === "VETERINARIO") return <Navigate to="/veterinario/citas-hoy" />;
     if (r === "RECEPCIONISTA") return <Navigate to="/recepcionista/citas" />;
     if (r === "ADMIN") return <Navigate to="/admin/dashboard" />;
     return <Navigate to="/login" />;
@@ -91,7 +92,8 @@ const App: React.FC = () => (
                             <RoleRoute allowed={["VETERINARIO"]}>
                                 <Layout>
                                     <Routes>
-                                        <Route path="agenda" element={<DashboardVeterinario />} />
+                                        <Route path="citas-hoy" element={<CitasHoyPage />} />
+                                        <Route path="citas" element={<Citas />} />
                                         <Route path="historias" element={<HistoriasPage />} />
                                         <Route
                                             path="reportes"
@@ -102,7 +104,7 @@ const App: React.FC = () => (
                                                 </>
                                             }
                                         />
-                                        <Route path="*" element={<Navigate to="agenda" />} />
+                                        <Route path="*" element={<Navigate to="citas-hoy" />} />
                                     </Routes>
                                 </Layout>
                             </RoleRoute>

@@ -7,7 +7,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import {
     Home, PawPrint, CalendarCheck, Receipt, Users,
-    Stethoscope, ClipboardList, BarChart3, Package, CreditCard, UserCog
+        Stethoscope, ClipboardList, BarChart3, Package, CreditCard, UserCog, CalendarClock
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
@@ -28,7 +28,8 @@ const menuByRole: Record<string, MenuGroup[]> = {
         {
             title: "Consultorio",
             items: [
-                { to: "/veterinario/agenda", label: "Agenda", icon: <CalendarCheck size={18} /> },
+                { to: "/veterinario/citas-hoy", label: "Citas de Hoy", icon: <CalendarClock size={18} /> },
+                { to: "/veterinario/citas", label: "Todas las Citas", icon: <CalendarCheck size={18} /> },
                 { to: "/veterinario/historias", label: "Historias", icon: <ClipboardList size={18} /> },
                 { to: "/veterinario/reportes", label: "Reportes", icon: <BarChart3 size={18} /> },
             ],
