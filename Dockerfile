@@ -29,6 +29,8 @@ COPY src ./src
 COPY public ./public
 
 # Construir la aplicación para producción
+# Asegurar que node_modules/.bin está en el PATH
+ENV PATH="/app/node_modules/.bin:${PATH}"
 RUN npm run build
 
 # ===== STAGE 2: Servidor nginx =====
