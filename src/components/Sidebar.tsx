@@ -49,10 +49,15 @@ const menuByRole: Record<string, MenuGroup[]> = {
             title: "Administración",
             items: [
                 { to: "/admin/dashboard", label: "Dashboard", icon: <Home size={18} /> },
+                { to: "/admin/citas-hoy", label: "Citas de Hoy", icon: <CalendarClock size={18} /> },
+                { to: "/admin/citas", label: "Todas las Citas", icon: <CalendarCheck size={18} /> },
+                { to: "/admin/mascotas", label: "Mascotas", icon: <PawPrint size={18} /> },
+                { to: "/admin/historias", label: "Historias", icon: <ClipboardList size={18} /> },
                 { to: "/admin/usuarios", label: "Usuarios", icon: <UserCog size={18} /> },
-                { to: "/admin/veterinarios", label: "Veterinarios", icon: <Stethoscope size={18} /> },
-                { to: "/admin/inventario", label: "Inventario", icon: <Package size={18} /> },
-                { to: "/admin/pagos", label: "Pagos", icon: <CreditCard size={18} /> },
+                // Los siguientes quedan como futuros módulos
+                // { to: "/admin/veterinarios", label: "Veterinarios", icon: <Stethoscope size={18} /> },
+                // { to: "/admin/inventario", label: "Inventario", icon: <Package size={18} /> },
+                // { to: "/admin/pagos", label: "Pagos", icon: <CreditCard size={18} /> },
             ],
         },
     ],
