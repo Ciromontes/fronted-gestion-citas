@@ -72,8 +72,14 @@ const AgendarCitaModal: React.FC<Props> = ({ isOpen, onClose, mascotaPreseleccio
   // Manejo de cambios en el formulario
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    const newValue = name === 'duracionMinutos' || name === 'idMascota' || name === 'idVeterinario' ? Number(value) : value;
-    console.log(`📝 Campo cambiado: ${name} = ${newValue}`);
+    let newValue: any = value;
+
+    // Convertir a número solo si el campo es numérico Y tiene un valor válido
+    if (name === 'duracionMinutos' || name === 'idMascota' || name === 'idVeterinario') {
+      newValue = value === '' ? 0 : Number(value);
+    }
+
+    console.log(`📝 Campo cambiado: ${name} = ${newValue} (tipo: ${typeof newValue})`);
     setForm(prev => {
       const updated = { ...prev, [name]: newValue };
       console.log('🔄 Estado actualizado:', updated);
@@ -151,14 +157,14 @@ const AgendarCitaModal: React.FC<Props> = ({ isOpen, onClose, mascotaPreseleccio
             </label>
             <select
               name="idMascota"
-              value={form.idMascota || 0}
+              value={form.idMascota || ''}
               onChange={handleChange}
               required
               style={inputStyle}
             >
-              <option value={0} disabled>-- Elige una mascota --</option>
+              <option value="">-- Elige una mascota --</option>
               {mascotas.length === 0 ? (
-                <option value={0} disabled>Cargando mascotas...</option>
+                <option disabled>Cargando mascotas...</option>
               ) : (
                 mascotas.map(m => (
                   <option key={m.id} value={m.id}>
@@ -176,13 +182,13 @@ const AgendarCitaModal: React.FC<Props> = ({ isOpen, onClose, mascotaPreseleccio
             </label>
             <select
               name="idVeterinario"
-              value={form.idVeterinario || 0}
+              value={form.idVeterinario || ''}
               onChange={handleChange}
               required
               style={inputStyle}
               disabled={loadingVets}
             >
-              <option value={0} disabled>
+              <option value="">
                 {loadingVets ? 'Cargando veterinarios...' : '-- Elige un veterinario --'}
               </option>
               {veterinarios.map(v => (
