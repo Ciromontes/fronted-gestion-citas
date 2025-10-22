@@ -26,21 +26,42 @@ export const validarFormCita = (form: FormCita): string | null => {
     return 'El motivo debe tener al menos 10 caracteres';
   }
 
-  // 2. Validar que la fecha no sea anterior a hoy
-  const hoy = new Date();
-  hoy.setHours(0, 0, 0, 0);
-  const fechaSeleccionada = new Date(form.fechaCita);
-  if (fechaSeleccionada < hoy) {
+  // Utilidades locales (evitar parsing UTC de 'YYYY-MM-DD')
+  const toLocalDate = (yyyyMMdd: string) => {
+    const [y, m, d] = yyyyMMdd.split('-').map(Number);
+    return new Date(y, (m || 1) - 1, d || 1); // fecha local a medianoche
+  };
+  const now = new Date();
+  const todayLocal = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  // 2. Validar que la fecha no sea anterior a hoy (comparación local)
+  const fechaSeleccionada = toLocalDate(form.fechaCita);
+  if (fechaSeleccionada < todayLocal) {
     return 'No puedes agendar citas en fechas pasadas';
   }
 
   // 3. Validar hora dentro del horario laboral (08:00 - 18:00)
-  const [horas, minutos] = form.horaCita.split(':').map(Number);
+  const [horasStr, minutosStr] = form.horaCita.split(':');
+  const horas = Number(horasStr);
+  const minutos = Number(minutosStr);
+  if (Number.isNaN(horas) || Number.isNaN(minutos)) {
+    return 'La hora seleccionada no es válida';
+  }
   if (horas < 8 || horas >= 18) {
     return 'La hora debe estar entre 08:00 y 18:00';
   }
 
-  // 4. Validar duración
+  // 4. Si la fecha es hoy, la hora debe ser >= a la hora actual
+  const sameDay = fechaSeleccionada.getTime() === todayLocal.getTime();
+  if (sameDay) {
+    const nowMins = now.getHours() * 60 + now.getMinutes();
+    const selMins = horas * 60 + minutos;
+    if (selMins < nowMins) {
+      return 'Para hoy, la hora debe ser posterior a la hora actual';
+    }
+  }
+
+  // 5. Validar duración
   if (form.duracionMinutos < 15 || form.duracionMinutos > 120) {
     return 'La duración debe estar entre 15 y 120 minutos';
   }
@@ -112,4 +133,3 @@ export const obtenerTodasLasCitas = async (token: string) => {
   if (!response.ok) throw new Error('Error al cargar citas');
   return response.json();
 };
-

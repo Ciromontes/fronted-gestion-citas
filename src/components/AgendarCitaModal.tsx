@@ -137,6 +137,12 @@ const AgendarCitaModal: React.FC<Props> = ({ isOpen, onClose, mascotaPreseleccio
     }
   };
 
+  // Utilidades de fecha/hora locales
+  const pad2 = (n: number) => String(n).padStart(2, '0');
+  const nowLocal = new Date();
+  const todayStrLocal = `${nowLocal.getFullYear()}-${pad2(nowLocal.getMonth() + 1)}-${pad2(nowLocal.getDate())}`; // YYYY-MM-DD
+  const nowHHmmLocal = `${pad2(nowLocal.getHours())}:${pad2(nowLocal.getMinutes())}`; // HH:mm
+
   // Generar opciones de hora (08:00 a 18:00 cada 30 min)
   const generarOpcionesHora = () => {
     const opciones = [];
@@ -148,10 +154,13 @@ const AgendarCitaModal: React.FC<Props> = ({ isOpen, onClose, mascotaPreseleccio
   };
 
   // Fecha mínima (hoy) y máxima (+3 meses)
-  const today = new Date().toISOString().split('T')[0];
+  // Reemplazar por cálculo local para evitar desfases por UTC
+  const today = todayStrLocal;
   const maxDate = new Date();
   maxDate.setMonth(maxDate.getMonth() + 3);
-  const maxDateStr = maxDate.toISOString().split('T')[0];
+  const maxDateStr = `${maxDate.getFullYear()}-${pad2(maxDate.getMonth() + 1)}-${pad2(maxDate.getDate())}`;
+
+  const isTodaySelected = form.fechaCita === today;
 
   if (!isOpen) return null;
 
@@ -239,9 +248,17 @@ const AgendarCitaModal: React.FC<Props> = ({ isOpen, onClose, mascotaPreseleccio
               </label>
               <select name="horaCita" value={form.horaCita} onChange={handleChange} required style={inputStyle}>
                 <option value="">-- Selecciona hora --</option>
-                {generarOpcionesHora().map(h => (
-                  <option key={h} value={h}>{h.substring(0, 5)}</option>
-                ))}
+                {(
+                  () => {
+                    const opciones = generarOpcionesHora();
+                    const fil = isTodaySelected
+                      ? opciones.filter(h => h.substring(0,5) >= nowHHmmLocal)
+                      : opciones;
+                    return fil.map(h => (
+                      <option key={h} value={h}>{h.substring(0, 5)}</option>
+                    ));
+                  }
+                )()}
               </select>
             </div>
           </div>
