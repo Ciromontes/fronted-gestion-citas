@@ -51,7 +51,7 @@ export const validarFormCita = (form: FormCita): string | null => {
 // Crear nueva cita
 export const crearCita = async (form: FormCita, token: string): Promise<{ success: boolean; message: string; data?: any }> => {
   try {
-    const response = await fetch(`${BASE_URL}/citas`, {
+    const response = await fetch(`${BASE_URL}/citas/agendar`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -91,8 +91,19 @@ export const crearCita = async (form: FormCita, token: string): Promise<{ succes
   }
 };
 
-// Obtener citas del usuario autenticado
+// Obtener citas del usuario autenticado (CLIENTE usa /mis-citas)
 export const obtenerMisCitas = async (token: string) => {
+  const response = await fetch(`${BASE_URL}/citas/mis-citas`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+  if (!response.ok) throw new Error('Error al cargar citas');
+  return response.json();
+};
+
+// Obtener TODAS las citas (solo para ADMIN y VETERINARIO)
+export const obtenerTodasLasCitas = async (token: string) => {
   const response = await fetch(`${BASE_URL}/citas`, {
     headers: {
       'Authorization': `Bearer ${token}`
