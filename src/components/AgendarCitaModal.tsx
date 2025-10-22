@@ -49,15 +49,19 @@ const AgendarCitaModal: React.FC<Props> = ({ isOpen, onClose, mascotaPreseleccio
     if (isOpen && token) {
       const fetchMascotas = async () => {
         try {
+          console.log('🔄 Cargando mascotas...');
           const res = await axios.get('http://localhost:8080/api/mascotas/mias', {
             headers: { Authorization: `Bearer ${token}` }
           });
+          console.log('✅ Mascotas cargadas:', res.data);
           setMascotas(res.data);
           // Si hay mascota preseleccionada, setearla
           if (mascotaPreseleccionada) {
+            console.log('📌 Mascota preseleccionada:', mascotaPreseleccionada);
             setForm(prev => ({ ...prev, idMascota: mascotaPreseleccionada }));
           }
-        } catch {
+        } catch (err) {
+          console.error('❌ Error cargando mascotas:', err);
           setError('No se pudieron cargar tus mascotas');
         }
       };
@@ -68,7 +72,13 @@ const AgendarCitaModal: React.FC<Props> = ({ isOpen, onClose, mascotaPreseleccio
   // Manejo de cambios en el formulario
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: name === 'duracionMinutos' || name === 'idMascota' || name === 'idVeterinario' ? Number(value) : value }));
+    const newValue = name === 'duracionMinutos' || name === 'idMascota' || name === 'idVeterinario' ? Number(value) : value;
+    console.log(`📝 Campo cambiado: ${name} = ${newValue}`);
+    setForm(prev => {
+      const updated = { ...prev, [name]: newValue };
+      console.log('🔄 Estado actualizado:', updated);
+      return updated;
+    });
   };
 
   // Envío del formulario
@@ -139,13 +149,23 @@ const AgendarCitaModal: React.FC<Props> = ({ isOpen, onClose, mascotaPreseleccio
             <label style={labelStyle}>
               <User size={18} /> Selecciona tu mascota *
             </label>
-            <select name="idMascota" value={form.idMascota} onChange={handleChange} required style={inputStyle}>
-              <option value={0}>-- Elige una mascota --</option>
-              {mascotas.map(m => (
-                <option key={m.id} value={m.id}>
-                  {m.nombre} ({m.especie} - {m.raza})
-                </option>
-              ))}
+            <select
+              name="idMascota"
+              value={form.idMascota || 0}
+              onChange={handleChange}
+              required
+              style={inputStyle}
+            >
+              <option value={0} disabled>-- Elige una mascota --</option>
+              {mascotas.length === 0 ? (
+                <option value={0} disabled>Cargando mascotas...</option>
+              ) : (
+                mascotas.map(m => (
+                  <option key={m.id} value={m.id}>
+                    {m.nombre} ({m.especie} - {m.raza})
+                  </option>
+                ))
+              )}
             </select>
           </div>
 
@@ -154,11 +174,20 @@ const AgendarCitaModal: React.FC<Props> = ({ isOpen, onClose, mascotaPreseleccio
             <label style={labelStyle}>
               <Stethoscope size={18} /> Elige un veterinario *
             </label>
-            <select name="idVeterinario" value={form.idVeterinario} onChange={handleChange} required style={inputStyle} disabled={loadingVets}>
-              <option value={0}>{loadingVets ? 'Cargando...' : '-- Elige un veterinario --'}</option>
+            <select
+              name="idVeterinario"
+              value={form.idVeterinario || 0}
+              onChange={handleChange}
+              required
+              style={inputStyle}
+              disabled={loadingVets}
+            >
+              <option value={0} disabled>
+                {loadingVets ? 'Cargando veterinarios...' : '-- Elige un veterinario --'}
+              </option>
               {veterinarios.map(v => (
                 <option key={v.id} value={v.idVeterinario}>
-                  {v.nombre}
+                  {v.nombre} - {v.email}
                 </option>
               ))}
             </select>
