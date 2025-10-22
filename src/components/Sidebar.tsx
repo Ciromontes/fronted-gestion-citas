@@ -3,7 +3,7 @@
 // Usa NavLink para activar la opción actual.
 
 /* --- file: src/components/Sidebar.tsx --- */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
     Home, PawPrint, CalendarCheck, Receipt, Users,
@@ -64,9 +64,78 @@ const menuByRole: Record<string, MenuGroup[]> = {
 };
 
 const Sidebar: React.FC = () => {
-    const { rol } = useAuth();
+    const { rol, token } = useAuth();
     const roleKey = (rol ?? "").toUpperCase();
     const groups = menuByRole[roleKey] ?? [];
+
+    // Badges: conteo de citas de hoy y total de mascotas (sin tocar backend: lectura rápida y caché corta)
+    const [citasHoyCount, setCitasHoyCount] = useState<number | null>(null);
+    const [mascotasCount, setMascotasCount] = useState<number | null>(null);
+
+    useEffect(() => {
+        if (!token) return;
+        const now = Date.now();
+
+        // Helper para caché de sesión (TTL 60s)
+        const getCache = (k: string) => {
+            try {
+                const raw = sessionStorage.getItem(k);
+                if (!raw) return null;
+                const { ts, val } = JSON.parse(raw);
+                if (now - ts > 60000) return null; // expira a 60s
+                return val;
+            } catch { return null; }
+        };
+        const setCache = (k: string, val: any) => {
+            try { sessionStorage.setItem(k, JSON.stringify({ ts: now, val })); } catch {}
+        };
+
+        // Citas de hoy (ADMIN y VETERINARIO)
+        if (roleKey === 'ADMIN' || roleKey === 'VETERINARIO') {
+            const cached = getCache('badge_citas_hoy');
+            if (cached !== null) {
+                setCitasHoyCount(cached as number);
+            } else {
+                fetch('http://localhost:8080/api/citas/hoy', { headers: { Authorization: `Bearer ${token}` } })
+                    .then(r => r.ok ? r.json() : [])
+                    .then((data: any[]) => {
+                        const n = Array.isArray(data) ? data.length : 0;
+                        setCitasHoyCount(n);
+                        setCache('badge_citas_hoy', n);
+                    })
+                    .catch(() => setCitasHoyCount(null));
+            }
+        }
+
+        // Mascotas (ADMIN)
+        if (roleKey === 'ADMIN') {
+            const cachedM = getCache('badge_mascotas');
+            if (cachedM !== null) {
+                setMascotasCount(cachedM as number);
+            } else {
+                fetch('http://localhost:8080/api/mascotas', { headers: { Authorization: `Bearer ${token}` } })
+                    .then(r => r.ok ? r.json() : [])
+                    .then((data: any[]) => {
+                        const n = Array.isArray(data) ? data.length : 0;
+                        setMascotasCount(n);
+                        setCache('badge_mascotas', n);
+                    })
+                    .catch(() => setMascotasCount(null));
+            }
+        }
+    }, [roleKey, token]);
+
+    const badgeStyle: React.CSSProperties = {
+        marginLeft: 8,
+        backgroundColor: '#111827',
+        color: '#fff',
+        borderRadius: 999,
+        fontSize: 11,
+        lineHeight: '16px',
+        padding: '0 6px',
+        minWidth: 16,
+        textAlign: 'center'
+    };
 
     return (
         <aside className="sidebar">
@@ -84,6 +153,13 @@ const Sidebar: React.FC = () => {
                             >
                                 {it.icon}
                                 <span>{it.label}</span>
+                                {/* Badges contextuales */}
+                                {it.label === 'Citas de Hoy' && typeof citasHoyCount === 'number' && (
+                                  <span style={badgeStyle}>{citasHoyCount}</span>
+                                )}
+                                {it.label === 'Mascotas' && typeof mascotasCount === 'number' && (
+                                  <span style={badgeStyle}>{mascotasCount}</span>
+                                )}
                             </NavLink>
                         ))}
                     </nav>
