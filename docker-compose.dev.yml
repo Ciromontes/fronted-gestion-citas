@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vetclinic-frontend-dev
+    ports:
+      - "3000:80"
+    environment:
+      - VITE_API_URL=http://backend:8080/api
+    networks:
+      - vetclinic-network
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  backend:
+    image: gestion-citas-backend:latest
+    container_name: vetclinic-backend-dev
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/clinicaveterinaria
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+    networks:
+      - vetclinic-network
+    depends_on:
+      - mysql
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.0
+    container_name: vetclinic-mysql-dev
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=clinicaveterinaria
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - vetclinic-network
+    restart: unless-stopped
+
+networks:
+  vetclinic-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+    driver: local
+

@@ -19,7 +19,7 @@ const Login: React.FC = () => {
         setError("");
         try {
             // Llamada al endpoint de autenticación (sin cambios)
-            const res = await axios.post("http://localhost:8080/api/auth/login", {
+            const res = await axios.post(API_CONFIG.ENDPOINTS.LOGIN, {
                 email,
                 password,
             });

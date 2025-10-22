@@ -1,7 +1,9 @@
 // Servicio centralizado para operaciones relacionadas con citas
 // Incluye validaciones y manejo de errores consistente
 
-const BASE_URL = 'http://localhost:8080/api';
+import API_CONFIG from '../config/api.config';
+
+const BASE_URL = API_CONFIG.BASE_URL;
 
 // Interfaz del formulario de cita
 export interface FormCita {

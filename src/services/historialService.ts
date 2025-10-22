@@ -4,8 +4,9 @@
  */
 
 import type { HistorialCompleto } from '../types/historial';
+import API_CONFIG from '../config/api.config';
 
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = API_CONFIG.BASE_URL;
 
 export const historialService = {
   /**
