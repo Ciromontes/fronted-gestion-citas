@@ -1,6 +1,0 @@
-FROM node:20-alpine
-WORKDIR /app
-COPY package*.json ./
-# Try with --legacy-peer-deps and ignore-scripts
-RUN npm install --legacy-peer-deps --ignore-scripts=false
-RUN ls -la node_modules/.bin/ | grep tsc
