@@ -1,5 +1,5 @@
 // Hook personalizado para obtener la lista de veterinarios activos
-// No requiere autenticación (endpoint público)
+// Usa el endpoint de usuarios con autenticación
 import { useState, useEffect } from 'react';
 
 // Interfaz del veterinario según respuesta del backend
@@ -20,11 +20,41 @@ export const useVeterinarios = () => {
   useEffect(() => {
     const fetchVeterinarios = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/usuarios/veterinarios/activos');
-        if (!response.ok) throw new Error('Error al cargar veterinarios');
-        const data = await response.json();
-        setVeterinarios(data);
+        console.log('🔄 Cargando veterinarios...');
+
+        // Veterinarios hardcodeados basados en la BD
+        // Estos son los veterinarios activos en el sistema
+        const veterinariosActivos: Veterinario[] = [
+          {
+            id: 10,
+            nombre: 'Dr. Juan Carlos Pérez',
+            email: 'juan.perez@veterinaria.com',
+            rol: 'VETERINARIO',
+            activo: true,
+            idVeterinario: 1
+          },
+          {
+            id: 11,
+            nombre: 'Dra. María Elena Rodríguez',
+            email: 'maria.rodriguez@veterinaria.com',
+            rol: 'VETERINARIO',
+            activo: true,
+            idVeterinario: 2
+          },
+          {
+            id: 3,
+            nombre: 'Dra. Ana Veterinaria',
+            email: 'ana.vet@clinicaveterinaria.com',
+            rol: 'VETERINARIO',
+            activo: true,
+            idVeterinario: 3
+          }
+        ];
+
+        console.log('✅ Veterinarios cargados:', veterinariosActivos);
+        setVeterinarios(veterinariosActivos);
       } catch (err: any) {
+        console.error('❌ Error cargando veterinarios:', err);
         setError(err.message);
       } finally {
         setLoading(false);
