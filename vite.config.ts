@@ -4,8 +4,10 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/app/', // Base path para servir desde /app en producción
   server: {
+    host: true, // Listen on all addresses (required for Docker)
+    port: 5173,
+    strictPort: true,
     hmr: {
       overlay: false // Desactiva el overlay de errores en desarrollo
     }
@@ -13,11 +15,15 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
-    // Generar rutas relativas a /app/
     rollupOptions: {
       output: {
         manualChunks: undefined
       }
     }
+  },
+  preview: {
+    host: true,
+    port: 80,
+    strictPort: true
   }
 })

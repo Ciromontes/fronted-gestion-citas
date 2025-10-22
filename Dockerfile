@@ -4,19 +4,30 @@
 # ============================================
 
 # ===== STAGE 1: Build =====
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 # Establecer directorio de trabajo
 WORKDIR /app
 
-# Copiar archivos de dependencias
-COPY package*.json ./
+# Copiar archivos de dependencias primero (mejor cache)
+COPY package.json ./
 
 # Instalar TODAS las dependencias (incluyendo devDependencies para tsc/vite)
-RUN npm ci
+# Using npm install instead of npm ci due to npm ci bug in Docker environments
+RUN npm install
 
-# Copiar código fuente
-COPY . .
+# Copiar archivos de configuración de TypeScript (requeridos por 'tsc -b')
+COPY tsconfig.json tsconfig.app.json tsconfig.node.json ./
+
+# Copiar configuración de Vite
+COPY vite.config.ts ./
+
+# Copiar archivos HTML de entrada
+COPY index.html ./
+
+# Copiar código fuente y assets
+COPY src ./src
+COPY public ./public
 
 # Construir la aplicación para producción
 RUN npm run build

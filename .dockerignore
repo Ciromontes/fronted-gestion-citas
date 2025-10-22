@@ -92,7 +92,7 @@ $RECYCLE.BIN/
 
 .eslintrc*
 .prettierrc*
-tsconfig.*.json
+# tsconfig.*.json - REMOVED: These are required for TypeScript build (tsc -b)
 vite.config.ts.timestamp*
 
 # ============================================
