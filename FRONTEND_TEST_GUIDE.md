@@ -129,7 +129,7 @@ CLIENTE:   lucia.cliente@clinicaveterinaria.com / cliente123
 1. Desde el historial de una mascota, click en "Agregar Entrada"
 2. Llena el formulario:
    - Descripción: `Control rutinario. Mascota en buen estado.`
-   - Observaciones: `Recomendar refuerzo de vacuna en 6 meses`
+   - Observaciones: ` 
    - Peso: `26.5`
    - Temperatura: `38.3`
    - Frecuencia Cardíaca: `118`
