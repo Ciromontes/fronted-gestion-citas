@@ -4,7 +4,7 @@
 # ============================================
 
 # ===== STAGE 1: Build =====
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 # Establecer directorio de trabajo
 WORKDIR /app
@@ -29,8 +29,6 @@ COPY src ./src
 COPY public ./public
 
 # Construir la aplicación para producción
-# Asegurar que node_modules/.bin está en el PATH
-ENV PATH="/app/node_modules/.bin:${PATH}"
 RUN npm run build
 
 # ===== STAGE 2: Servidor nginx =====

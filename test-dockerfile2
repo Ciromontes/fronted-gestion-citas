@@ -1,0 +1,7 @@
+FROM node:20-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+RUN ls -la / app/node_modules/.bin/ || echo "node_modules not found"
+RUN which tsc || echo "tsc not in PATH"
+RUN /app/node_modules/.bin/tsc --version || echo "tsc binary not executable"
