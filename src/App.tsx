@@ -9,12 +9,13 @@ import Login from "./components/Login";
 import Layout from "./components/Layout";
 import Citas from "./components/Citas";
 import DashboardCliente from "./components/DashboardCliente";
-import DashboardVeterinario from "./components/DashboardVeterinario";
 import DashboardRecepcionista from "./components/DashboardRecepcionista";
 import DashboardAdmin from "./components/DashboardAdmin";
 import HistoriasPage from "./components/HistoriasPage";
 import TablaUsuarios from "./components/TablaUsuarios";
 import CitasHoyPage from "./components/CitasHoyPage";
+import AdminCitasHoyPage from "./components/AdminCitasHoyPage";
+import AdminMascotasPage from "./components/AdminMascotasPage";
 
 // Ruta protegida por token
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
@@ -147,6 +148,10 @@ const App: React.FC = () => (
                                 <Layout>
                                     <Routes>
                                         <Route path="dashboard" element={<DashboardAdmin />} />
+                                        <Route path="citas-hoy" element={<AdminCitasHoyPage />} />
+                                        <Route path="citas" element={<Citas />} />
+                                        <Route path="mascotas" element={<AdminMascotasPage />} />
+                                        <Route path="historias" element={<HistoriasPage />} />
                                         <Route path="usuarios" element={<TablaUsuarios />} />
                                         <Route
                                             path="veterinarios"

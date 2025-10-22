@@ -13,10 +13,11 @@ interface Cita {
 
 interface CitasHoyTableProps {
     citas: Cita[];
-    onCompletarCita: (idCita: number) => void;
+    onCompletarCita?: (idCita: number) => void;
+    showAcciones?: boolean;
 }
 
-const CitasHoyTable = ({ citas, onCompletarCita }: CitasHoyTableProps) => {
+const CitasHoyTable = ({ citas, onCompletarCita, showAcciones = true }: CitasHoyTableProps) => {
     const formatearHora = (hora: string) => {
         // Formato: "10:30:00" -> "10:30"
         return hora.substring(0, 5);
@@ -55,9 +56,11 @@ const CitasHoyTable = ({ citas, onCompletarCita }: CitasHoyTableProps) => {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Estado
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Acciones
-                    </th>
+                    {showAcciones && (
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Acciones
+                      </th>
+                    )}
                 </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -90,20 +93,22 @@ const CitasHoyTable = ({ citas, onCompletarCita }: CitasHoyTableProps) => {
                   {cita.estadoCita}
                 </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            {cita.estadoCita === 'Programada' && (
-                                <button
-                                    onClick={() => onCompletarCita(cita.id)}
-                                    className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                                >
-                                    <CheckCircle className="w-4 h-4 mr-1" />
-                                    Completar
-                                </button>
-                            )}
-                            {cita.estadoCita === 'Completada' && (
-                                <span className="text-green-600 font-medium">✓ Completada</span>
-                            )}
-                        </td>
+                        {showAcciones && (
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                              {cita.estadoCita === 'Programada' && onCompletarCita && (
+                                  <button
+                                      onClick={() => onCompletarCita(cita.id)}
+                                      className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                                  >
+                                      <CheckCircle className="w-4 h-4 mr-1" />
+                                      Completar
+                                  </button>
+                              )}
+                              {cita.estadoCita === 'Completada' && (
+                                  <span className="text-green-600 font-medium">✓ Completada</span>
+                              )}
+                          </td>
+                        )}
                     </tr>
                 ))}
                 </tbody>

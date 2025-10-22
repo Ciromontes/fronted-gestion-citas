@@ -23,6 +23,11 @@ const Citas: React.FC = () => {
         return "http://localhost:8080/api/citas";
     };
 
+    const titulo = rol === 'CLIENTE' ? 'Mis Citas' : 'Todas las Citas';
+    const subtitulo = rol === 'CLIENTE'
+        ? 'Consulta y administra tus próximas citas.'
+        : (rol === 'VETERINARIO' ? 'Coordinación de agenda del consultorio.' : 'Supervisión y coordinación del sistema.');
+
     // Obtiene las citas usando el endpoint correcto según rol
     useEffect(() => {
         const fetchCitas = async () => {
@@ -57,13 +62,15 @@ const Citas: React.FC = () => {
         <>
             <div className="stack" style={{ justifyContent: "space-between", marginBottom: "0.5rem" }}>
                 <div>
-                    <h1 className="page__title">Mis Citas</h1>
-                    <p className="page__subtitle">Consulta y administra tus próximas citas.</p>
+                    <h1 className="page__title">{titulo}</h1>
+                    <p className="page__subtitle">{subtitulo}</p>
                 </div>
-                <button className="btn btn--primary" onClick={() => setModalOpen(true)}>
-                    <Plus size={18} />
-                    <span>Nueva cita</span>
-                </button>
+                {rol === 'CLIENTE' && (
+                  <button className="btn btn--primary" onClick={() => setModalOpen(true)}>
+                      <Plus size={18} />
+                      <span>Nueva cita</span>
+                  </button>
+                )}
             </div>
 
             {error && <p style={{ color: "crimson" }}>{error}</p>}
@@ -75,20 +82,24 @@ const Citas: React.FC = () => {
                 ))}
             </div>
 
-            {/* FAB para móviles */}
-            <div className="fab">
-                <button className="btn btn--primary" onClick={() => setModalOpen(true)}>
-                    <Plus size={18} />
-                    <span> Nueva cita</span>
-                </button>
-            </div>
+            {/* FAB para móviles (solo cliente) */}
+            {rol === 'CLIENTE' && (
+              <div className="fab">
+                  <button className="btn btn--primary" onClick={() => setModalOpen(true)}>
+                      <Plus size={18} />
+                      <span> Nueva cita</span>
+                  </button>
+              </div>
+            )}
 
             {/* Modal de agendar cita */}
-            <AgendarCitaModal
-                isOpen={modalOpen}
-                onClose={() => setModalOpen(false)}
-                onSuccess={handleSuccess}
-            />
+            {rol === 'CLIENTE' && (
+              <AgendarCitaModal
+                  isOpen={modalOpen}
+                  onClose={() => setModalOpen(false)}
+                  onSuccess={handleSuccess}
+              />
+            )}
         </>
     );
 };
