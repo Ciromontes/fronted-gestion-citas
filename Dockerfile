@@ -9,14 +9,24 @@ FROM node:18-alpine AS builder
 # Establecer directorio de trabajo
 WORKDIR /app
 
-# Copiar archivos de dependencias
+# Copiar archivos de dependencias primero (mejor cache)
 COPY package*.json ./
 
 # Instalar TODAS las dependencias (incluyendo devDependencies para tsc/vite)
 RUN npm ci
 
-# Copiar código fuente
-COPY . .
+# Copiar archivos de configuración de TypeScript (requeridos por 'tsc -b')
+COPY tsconfig.json tsconfig.app.json tsconfig.node.json ./
+
+# Copiar configuración de Vite
+COPY vite.config.ts ./
+
+# Copiar archivos HTML de entrada
+COPY index.html ./
+
+# Copiar código fuente y assets
+COPY src ./src
+COPY public ./public
 
 # Construir la aplicación para producción
 RUN npm run build
