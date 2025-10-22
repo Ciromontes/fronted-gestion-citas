@@ -53,12 +53,33 @@ const AgendarCitaModal: React.FC<Props> = ({ isOpen, onClose, mascotaPreseleccio
           const res = await axios.get('http://localhost:8080/api/mascotas/mias', {
             headers: { Authorization: `Bearer ${token}` }
           });
-          console.log('✅ Mascotas cargadas:', res.data);
-          setMascotas(res.data);
-          // Si hay mascota preseleccionada, setearla
+          console.log('✅ Mascotas cargadas (raw):', res.data);
+
+          // Normalizar datos del backend -> frontend { id, nombre, especie, raza, edad }
+          const normalizadas: Mascota[] = (Array.isArray(res.data) ? res.data : []).map((m: any) => ({
+            id: m.id ?? m.idMascota ?? m.id_mascota,
+            nombre: m.nombre,
+            especie: m.especie,
+            raza: m.raza,
+            edad: String(m.edad ?? '')
+          }));
+          console.log('✅ Mascotas normalizadas:', normalizadas);
+
+          setMascotas(normalizadas);
+
+          // Si hay mascota preseleccionada, setearla si existe en la lista
           if (mascotaPreseleccionada) {
-            console.log('📌 Mascota preseleccionada:', mascotaPreseleccionada);
-            setForm(prev => ({ ...prev, idMascota: mascotaPreseleccionada }));
+            const existe = normalizadas.some(x => x.id === mascotaPreseleccionada);
+            if (existe) {
+              console.log('📌 Mascota preseleccionada aplicada:', mascotaPreseleccionada);
+              setForm(prev => ({ ...prev, idMascota: mascotaPreseleccionada }));
+            }
+          } else {
+            // Si no hay preselección y solo hay una mascota, seleccionarla automáticamente
+            if (normalizadas.length === 1) {
+              console.log('📌 Selección automática de única mascota:', normalizadas[0].id);
+              setForm(prev => ({ ...prev, idMascota: normalizadas[0].id }));
+            }
           }
         } catch (err) {
           console.error('❌ Error cargando mascotas:', err);
@@ -157,12 +178,12 @@ const AgendarCitaModal: React.FC<Props> = ({ isOpen, onClose, mascotaPreseleccio
             </label>
             <select
               name="idMascota"
-              value={form.idMascota || ''}
+              value={form.idMascota}
               onChange={handleChange}
               required
               style={inputStyle}
             >
-              <option value="">-- Elige una mascota --</option>
+              <option value={0}>-- Elige una mascota --</option>
               {mascotas.length === 0 ? (
                 <option disabled>Cargando mascotas...</option>
               ) : (
@@ -173,6 +194,10 @@ const AgendarCitaModal: React.FC<Props> = ({ isOpen, onClose, mascotaPreseleccio
                 ))
               )}
             </select>
+            {/* Debug: mostrar valor actual */}
+            <small style={{color: '#666', fontSize: '0.75rem'}}>
+              Valor seleccionado: {form.idMascota || 'ninguno'}
+            </small>
           </div>
 
           {/* Seleccionar Veterinario */}
@@ -182,13 +207,13 @@ const AgendarCitaModal: React.FC<Props> = ({ isOpen, onClose, mascotaPreseleccio
             </label>
             <select
               name="idVeterinario"
-              value={form.idVeterinario || ''}
+              value={form.idVeterinario}
               onChange={handleChange}
               required
               style={inputStyle}
               disabled={loadingVets}
             >
-              <option value="">
+              <option value={0}>
                 {loadingVets ? 'Cargando veterinarios...' : '-- Elige un veterinario --'}
               </option>
               {veterinarios.map(v => (
@@ -366,4 +391,3 @@ const submitButtonStyle: React.CSSProperties = {
 };
 
 export default AgendarCitaModal;
-
