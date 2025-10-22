@@ -1,6 +1,7 @@
 // --- file: src/components/Citas.tsx ---
-// Listado de citas genérico con UI moderna reutilizando CitaCard.
-// Endpoint: GET /api/citas (NO se modifica).
+// Listado de citas con endpoints diferenciados por rol
+// CLIENTE: GET /api/citas/mis-citas (solo sus citas)
+// ADMIN/VETERINARIO: GET /api/citas (todas las citas)
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Plus } from "lucide-react";
@@ -9,16 +10,24 @@ import CitaCard, {type Cita } from "./CitaCard";
 import AgendarCitaModal from "./AgendarCitaModal";
 
 const Citas: React.FC = () => {
-    const { token } = useAuth();
+    const { token, rol } = useAuth();
     const [citas, setCitas] = useState<Cita[]>([]);
     const [error, setError] = useState("");
     const [modalOpen, setModalOpen] = useState(false);
 
-    // Obtiene las citas usando el token (sin cambiar endpoint)
+    // Determinar endpoint según el rol
+    const getEndpoint = () => {
+        if (rol === 'CLIENTE') {
+            return "http://localhost:8080/api/citas/mis-citas";
+        }
+        return "http://localhost:8080/api/citas";
+    };
+
+    // Obtiene las citas usando el endpoint correcto según rol
     useEffect(() => {
         const fetchCitas = async () => {
             try {
-                const res = await axios.get("http://localhost:8080/api/citas", {
+                const res = await axios.get(getEndpoint(), {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setCitas(res.data);
@@ -27,13 +36,13 @@ const Citas: React.FC = () => {
             }
         };
         fetchCitas();
-    }, [token]);
+    }, [token, rol]);
 
     const handleSuccess = () => {
         // Recargar la lista de citas
         const fetchCitas = async () => {
             try {
-                const res = await axios.get("http://localhost:8080/api/citas", {
+                const res = await axios.get(getEndpoint(), {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setCitas(res.data);
