@@ -10,10 +10,11 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Copiar archivos de dependencias primero (mejor cache)
-COPY package*.json ./
+COPY package.json ./
 
 # Instalar TODAS las dependencias (incluyendo devDependencies para tsc/vite)
-RUN npm ci
+# Using npm install instead of npm ci due to npm ci bug in Docker environments
+RUN npm install
 
 # Copiar archivos de configuración de TypeScript (requeridos por 'tsc -b')
 COPY tsconfig.json tsconfig.app.json tsconfig.node.json ./
