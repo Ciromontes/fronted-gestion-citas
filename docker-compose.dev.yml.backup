@@ -1,0 +1,22 @@
+# ✅ Docker Compose para Frontend VetClinic
+# Reutiliza el backend ya existente y funcionando
+
+services:
+  # ========== FRONTEND ==========
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vetclinic-frontend-dev
+    ports:
+      - "3000:80"
+    environment:
+      - VITE_API_URL=http://localhost:8080/api
+    networks:
+      - gestion-citas_default  # ✅ Red del backend existente
+    restart: unless-stopped
+
+networks:
+  gestion-citas_default:
+    external: true  # ✅ Usa la red del backend ya creada
+

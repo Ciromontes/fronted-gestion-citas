@@ -1,7 +1,8 @@
 // Configuración centralizada de la API
-// Lee la URL base desde las variables de entorno de Vite
+// En Docker, nginx hace proxy de /api/* al backend
+// En desarrollo local, usar http://localhost:8080/api
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 export const API_CONFIG = {
   BASE_URL: API_BASE_URL,

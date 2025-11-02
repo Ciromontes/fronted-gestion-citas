@@ -34,10 +34,11 @@ logs/
 # 🔒 ARCHIVOS DE SEGURIDAD - NO INCLUIR EN DOCKER
 # ============================================
 
-# Variables de entorno (CRÍTICO)
-.env
-.env.*
-!.env.example
+# Variables de entorno locales (CRÍTICO)
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # Archivos sensibles
 *.pem
@@ -48,24 +49,40 @@ logs/
 **/secrets/
 **/credentials/
 
-# Tokens
-.npmrc
-.yarnrc
-
 # ============================================
-# Documentación (no necesaria en imagen)
+# ✅ ARCHIVOS QUE SÍ SE DEBEN INCLUIR:
+# - tsconfig*.json (necesarios para build)
+# - vite.config.ts (necesario para build)
+# - eslint.config.js (necesario para build)
+# - index.html (necesario para build)
+# - src/ (código fuente)
+# - public/ (assets estáticos)
 # ============================================
 
-README.md
-SECURITY.md
-QUICKSTART.md
-PROMPT_BACKEND_MYSQL.md
+# Docker files
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Documentation (*.md excepto package.json)
 *.md
 !package.json
 !package-lock.json
 
-# ============================================
-# Testing y Coverage
+# Testing
+coverage/
+.nyc_output/
+**/__tests__/
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+
+# OS
+.DS_Store
+Thumbs.db
+.npmrc
+.yarnrc
 # ============================================
 
 coverage/
@@ -87,12 +104,12 @@ desktop.ini
 $RECYCLE.BIN/
 
 # ============================================
-# Archivos de configuración de desarrollo
+# Archivos de configuracion de desarrollo
 # ============================================
 
 .eslintrc*
 .prettierrc*
-tsconfig.*.json
+# tsconfig.*.json  <-- COMENTADO: necesarios para build
 vite.config.ts.timestamp*
 
 # ============================================

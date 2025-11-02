@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { API_CONFIG } from "../config/api.config";
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState("");     // Email del usuario
@@ -43,6 +44,8 @@ const Login: React.FC = () => {
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     required
+                    pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
+                    title="Ingresa un correo válido (ej: usuario@dominio.com)"
                     style={{ width: "100%", marginBottom: 10, padding: 10, borderRadius: 10, border: "1px solid #e5e7eb" }}
                 />
                 <input
