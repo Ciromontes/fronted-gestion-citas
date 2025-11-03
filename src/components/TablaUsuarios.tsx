@@ -80,7 +80,7 @@ const TablaUsuarios = () => {
     }, [busqueda, filtroRol, usuarios]);
 
     /**
-            const response = await axios.get(API_CONFIG.ENDPOINTS.USUARIOS, {
+     * Carga todos los usuarios desde el backend
      */
     const cargarUsuarios = async () => {
         console.log('👥 Cargando lista de usuarios...');
@@ -88,7 +88,7 @@ const TablaUsuarios = () => {
         setError(null);
 
         try {
-            const response = await axios.get('http://localhost:8080/api/usuarios', {
+            const response = await axios.get(API_CONFIG.ENDPOINTS.USUARIOS, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
