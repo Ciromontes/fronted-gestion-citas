@@ -41,8 +41,8 @@ const DashboardVeterinario = () => {
         setLoading(true);
         setError(null);
 
+        try {
             const response = await axios.get(API_CONFIG.ENDPOINTS.CITAS_HOY, {
-            const response = await axios.get('http://localhost:8080/api/citas/hoy', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -64,8 +64,8 @@ const DashboardVeterinario = () => {
         console.log('Completando cita ID:', idCita);
 
         try {
+            await axios.put(
                 API_CONFIG.ENDPOINTS.CITAS_ESTADO(idCita),
-                `http://localhost:8080/api/citas/${idCita}/estado`,
                 { estado: 'Completada' },
                 {
                     headers: {

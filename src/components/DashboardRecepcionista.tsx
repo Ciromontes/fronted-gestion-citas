@@ -15,8 +15,8 @@ const DashboardRecepcionista: React.FC = () => {
 
     useEffect(() => {
         const fetch = async () => {
+            try {
                 const res = await axios.get(API_CONFIG.ENDPOINTS.CITAS, {
-                const res = await axios.get("http://localhost:8080/api/citas", {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setCitas(res.data);

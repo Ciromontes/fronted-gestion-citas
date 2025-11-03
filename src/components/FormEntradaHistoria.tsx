@@ -63,8 +63,8 @@ const FormEntradaHistoria = ({ idHistoria, onEntradaAgregada, onCancelar }: Form
 
             console.log('📤 Datos a enviar:', entradaData);
 
+            const response = await axios.post(
                 API_CONFIG.ENDPOINTS.HISTORIAS_ENTRADA(idHistoria),
-                `http://localhost:8080/api/historias/${idHistoria}/entrada`,
                 entradaData,
                 {
                     headers: {

@@ -43,6 +43,7 @@ const DashboardCliente: React.FC = () => {
     useEffect(() => {
         const loadMisMascotas = async () => {
             try {
+            try {
                 setLoading(true);
                 console.log("🔄 Cargando mascotas...");
 
@@ -55,8 +56,8 @@ const DashboardCliente: React.FC = () => {
                     return;
                 }
 
+                const response = await axios.get<MascotaBackend[]>(
                     API_CONFIG.ENDPOINTS.MASCOTAS_MIAS,
-                    "http://localhost:8080/api/mascotas/mias",
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,

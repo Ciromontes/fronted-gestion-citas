@@ -32,8 +32,8 @@ const CitasHoyPage = () => {
     if (!token) return;
     setLoading(true);
     setError(null);
+    try {
       const res = await axios.get(API_CONFIG.ENDPOINTS.CITAS_HOY, {
-      const res = await axios.get('http://localhost:8080/api/citas/hoy', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCitas(res.data);
