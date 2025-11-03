@@ -7,6 +7,7 @@ import axios from 'axios';
 import CitasHoyTable from './CitasHoyTable';
 import BuscadorHistorias from './BuscadorHistorias';
 import { Calendar, FileText, BarChart3 } from 'lucide-react';
+import API_CONFIG from '../config/api.config';
 
 interface Cita {
     id: number;
@@ -40,7 +41,7 @@ const DashboardVeterinario = () => {
         setLoading(true);
         setError(null);
 
-        try {
+            const response = await axios.get(API_CONFIG.ENDPOINTS.CITAS_HOY, {
             const response = await axios.get('http://localhost:8080/api/citas/hoy', {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -63,7 +64,7 @@ const DashboardVeterinario = () => {
         console.log('Completando cita ID:', idCita);
 
         try {
-            await axios.put(
+                API_CONFIG.ENDPOINTS.CITAS_ESTADO(idCita),
                 `http://localhost:8080/api/citas/${idCita}/estado`,
                 { estado: 'Completada' },
                 {

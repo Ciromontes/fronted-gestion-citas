@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import MascotaCard from './MascotaCard';
 import HistorialMascotaModal from './HistorialMascotaModal';
+import API_CONFIG from '../config/api.config';
 
 interface MascotaBackend {
   idMascota?: number;
@@ -36,7 +37,7 @@ const AdminMascotasPage = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await axios.get<MascotaBackend[]>(`http://localhost:8080/api/mascotas`, {
+      const res = await axios.get<MascotaBackend[]>(API_CONFIG.ENDPOINTS.MASCOTAS, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = Array.isArray(res.data) ? res.data : [];

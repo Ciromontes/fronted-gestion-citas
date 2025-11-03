@@ -8,6 +8,7 @@ import axios from "axios"
 import { Calendar, Heart, Package, AlertTriangle, TrendingUp, Users } from "lucide-react"
 import { useAuth } from "../context/AuthContext"
 import TarjetaMetrica from "./TarjetaMetrica"
+import API_CONFIG from '../config/api.config'
 
 interface Metricas {
   citasMes: number
@@ -38,7 +39,7 @@ const DashboardAdmin = () => {
     setError(null)
 
     try {
-      const response = await axios.get("http://localhost:8080/api/admin/metricas", {
+      const response = await axios.get(API_CONFIG.ENDPOINTS.ADMIN_METRICAS, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -236,9 +236,44 @@ docker-compose -f docker-compose.dev.yml restart frontend
 ```cmd
 docker-compose -f docker-compose.dev.yml logs -f frontend
 ```
+## 🔄 ACTUALIZACIÓN - CORRECCIONES DE BUILD APLICADAS
+
+**Fecha de actualización:** 2025-10-22
+
+### ✅ Correcciones aplicadas para resolver error TS5083:
+
+1. **Dockerfile optimizado:**
+   - Orden de COPY específico (tsconfig antes del build)
+   - Copia explícita de archivos de configuración
+   
+2. **.dockerignore corregido:**
+   - Ya no bloquea archivos de configuración TypeScript
+   - Permite tsconfig*.json, vite.config.ts, eslint.config.js
+   
+3. **vite.config.ts mejorado:**
+   - Eliminado `base: '/app/'` problemático
+   - Agregado `host: true` y `usePolling: true` para Docker
+   
+4. **nginx.conf creado:**
+   - Configuración SPA completa
+   - Proxy reverso a /api opcional
+   - Compresión gzip y caché de assets
+
+**📄 Documentos relacionados:**
+- `CORRECCIONES_BUILD_APLICADAS.md` - Detalle completo de las correcciones
+- `ESTRATEGIA_DE_ORQUESTACION.md` - Plan maestro del proyecto completo
+
+**⚡ Próximo paso:**
+```cmd
+docker-compose -f docker-compose.dev.yml build --no-cache frontend
+docker-compose -f docker-compose.dev.yml up -d frontend
+```
 
 ---
 
+
+**Versión:** 1.1 (CORRECCIONES APLICADAS)
+**Estado:** ✅ CORRECCIONES APLICADAS - LISTO PARA BUILD
 ## 📊 PRUEBAS FUNCIONALES
 
 ### 1. Login como ADMIN

@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { useVeterinarios } from '../hooks/useVeterinarios';
 import { crearCita, validarFormCita, type FormCita } from '../services/citaService';
 import axios from 'axios';
+import API_CONFIG from '../config/api.config';
 
 interface Mascota {
   id: number;
@@ -50,7 +51,7 @@ const AgendarCitaModal: React.FC<Props> = ({ isOpen, onClose, mascotaPreseleccio
       const fetchMascotas = async () => {
         try {
           console.log('🔄 Cargando mascotas...');
-          const res = await axios.get('http://localhost:8080/api/mascotas/mias', {
+          const res = await axios.get(API_CONFIG.ENDPOINTS.MASCOTAS_MIAS, {
             headers: { Authorization: `Bearer ${token}` }
           });
           console.log('✅ Mascotas cargadas (raw):', res.data);

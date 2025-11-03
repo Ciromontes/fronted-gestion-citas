@@ -8,6 +8,7 @@ import { Plus } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import CitaCard, {type Cita } from "./CitaCard";
 import AgendarCitaModal from "./AgendarCitaModal";
+import API_CONFIG from '../config/api.config';
 
 const Citas: React.FC = () => {
     const { token, rol } = useAuth();
@@ -18,9 +19,9 @@ const Citas: React.FC = () => {
     // Determinar endpoint según el rol
     const getEndpoint = () => {
         if (rol === 'CLIENTE') {
-            return "http://localhost:8080/api/citas/mis-citas";
+            return API_CONFIG.ENDPOINTS.CITAS_MIS_CITAS;
         }
-        return "http://localhost:8080/api/citas";
+        return API_CONFIG.ENDPOINTS.CITAS;
     };
 
     const titulo = rol === 'CLIENTE' ? 'Mis Citas' : 'Todas las Citas';

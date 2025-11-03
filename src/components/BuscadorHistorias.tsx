@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import HistorialMascota from './HistorialMascota';
 import { Search, X, FileText, PawPrint, Calendar } from 'lucide-react';
+import API_CONFIG from '../config/api.config';
 
 interface HistoriaClinica {
     idHistoria: number;
@@ -66,7 +67,7 @@ const BuscadorHistorias = () => {
 
         try {
             const response = await axios.get(
-                `http://localhost:8080/api/historias/mascota/${mascotaId}`,
+                API_CONFIG.ENDPOINTS.HISTORIAS_MASCOTA(Number(mascotaId)),
                 {
                     headers: {
                         'Authorization': `Bearer ${token}`

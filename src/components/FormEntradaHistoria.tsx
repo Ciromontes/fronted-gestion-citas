@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { X } from 'lucide-react';
+import API_CONFIG from '../config/api.config';
 
 interface FormEntradaHistoriaProps {
     idHistoria: number;
@@ -62,7 +63,7 @@ const FormEntradaHistoria = ({ idHistoria, onEntradaAgregada, onCancelar }: Form
 
             console.log('📤 Datos a enviar:', entradaData);
 
-            const response = await axios.post(
+                API_CONFIG.ENDPOINTS.HISTORIAS_ENTRADA(idHistoria),
                 `http://localhost:8080/api/historias/${idHistoria}/entrada`,
                 entradaData,
                 {

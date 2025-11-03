@@ -10,6 +10,7 @@ import {
         Stethoscope, ClipboardList, BarChart3, Package, CreditCard, UserCog, CalendarClock
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import API_CONFIG from '../config/api.config';
 
 type MenuItem = { to: string; label: string; icon: React.ReactNode };
 type MenuGroup = { title: string; items: MenuItem[] };
@@ -96,7 +97,7 @@ const Sidebar: React.FC = () => {
             if (cached !== null) {
                 setCitasHoyCount(cached as number);
             } else {
-                fetch('http://localhost:8080/api/citas/hoy', { headers: { Authorization: `Bearer ${token}` } })
+                fetch(API_CONFIG.ENDPOINTS.CITAS_HOY, { headers: { Authorization: `Bearer ${token}` } })
                     .then(r => r.ok ? r.json() : [])
                     .then((data: any[]) => {
                         const n = Array.isArray(data) ? data.length : 0;
@@ -113,7 +114,7 @@ const Sidebar: React.FC = () => {
             if (cachedM !== null) {
                 setMascotasCount(cachedM as number);
             } else {
-                fetch('http://localhost:8080/api/mascotas', { headers: { Authorization: `Bearer ${token}` } })
+                fetch(API_CONFIG.ENDPOINTS.MASCOTAS, { headers: { Authorization: `Bearer ${token}` } })
                     .then(r => r.ok ? r.json() : [])
                     .then((data: any[]) => {
                         const n = Array.isArray(data) ? data.length : 0;

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import MascotaCard from "./MascotaCard";
 import AgendarCitaModal from "./AgendarCitaModal";
 import HistorialMascotaModal from "./HistorialMascotaModal";
+import API_CONFIG from '../config/api.config';
 
 // ✅ Tipo actualizado para coincidir con el backend
 interface MascotaBackend {
@@ -54,7 +55,7 @@ const DashboardCliente: React.FC = () => {
                     return;
                 }
 
-                const response = await axios.get<MascotaBackend[]>(
+                    API_CONFIG.ENDPOINTS.MASCOTAS_MIAS,
                     "http://localhost:8080/api/mascotas/mias",
                     {
                         headers: {

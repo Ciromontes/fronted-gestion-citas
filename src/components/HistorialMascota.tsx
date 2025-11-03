@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import FormEntradaHistoria from './FormEntradaHistoria';
 import { Calendar, User, FileText, Plus, Activity, Thermometer, Weight } from 'lucide-react';
+import API_CONFIG from '../config/api.config';
 
 interface HistoriaClinica {
     idHistoria: number;
@@ -47,7 +48,7 @@ const HistorialMascota = ({ historia }: HistorialMascotaProps) => {
         setLoading(true);
 
         try {
-            const response = await axios.get(
+                API_CONFIG.ENDPOINTS.HISTORIAS_ENTRADAS(historia.idHistoria),
                 `http://localhost:8080/api/historias/${historia.idHistoria}/entradas`,
                 {
                     headers: {

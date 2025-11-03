@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { UserCog, Search, AlertTriangle, CheckCircle, XCircle, Filter, ShieldAlert } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import API_CONFIG from '../config/api.config';
 
 /**
  * Interfaz que representa un usuario del sistema
@@ -79,7 +80,7 @@ const TablaUsuarios = () => {
     }, [busqueda, filtroRol, usuarios]);
 
     /**
-     * Carga todos los usuarios desde el backend
+            const response = await axios.get(API_CONFIG.ENDPOINTS.USUARIOS, {
      */
     const cargarUsuarios = async () => {
         console.log('👥 Cargando lista de usuarios...');
@@ -151,7 +152,7 @@ const TablaUsuarios = () => {
 
         try {
             const response = await axios.put(
-                `http://localhost:8080/api/usuarios/${id}/estado`,
+                API_CONFIG.ENDPOINTS.USUARIOS_ESTADO(id),
                 { activo: nuevoEstado },
                 {
                     headers: {

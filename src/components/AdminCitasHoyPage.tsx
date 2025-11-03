@@ -6,6 +6,7 @@ import axios from 'axios';
 import { Calendar } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import CitasHoyTable from './CitasHoyTable';
+import API_CONFIG from '../config/api.config';
 
 interface Cita {
   id: number;
@@ -30,7 +31,7 @@ const AdminCitasHoyPage = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await axios.get('http://localhost:8080/api/citas/hoy', {
+      const res = await axios.get(API_CONFIG.ENDPOINTS.CITAS_HOY, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCitas(res.data);
