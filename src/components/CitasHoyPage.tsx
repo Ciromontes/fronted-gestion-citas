@@ -52,8 +52,8 @@ const CitasHoyPage = () => {
   const onCompletarCita = async (idCita: number) => {
     if (!token) return;
     try {
+      await axios.put(
         API_CONFIG.ENDPOINTS.CITAS_ESTADO(idCita),
-        `http://localhost:8080/api/citas/${idCita}/estado`,
         { estado: 'Completada' },
         { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } }
       );

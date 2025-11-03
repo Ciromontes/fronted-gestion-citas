@@ -43,7 +43,6 @@ const DashboardCliente: React.FC = () => {
     useEffect(() => {
         const loadMisMascotas = async () => {
             try {
-            try {
                 setLoading(true);
                 console.log("🔄 Cargando mascotas...");
 
