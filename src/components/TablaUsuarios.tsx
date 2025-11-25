@@ -80,7 +80,7 @@ const TablaUsuarios = () => {
     }, [busqueda, filtroRol, usuarios]);
 
     /**
-            const response = await axios.get(API_CONFIG.ENDPOINTS.USUARIOS, {
+     * Carga todos los usuarios desde el backend
      */
     const cargarUsuarios = async () => {
         console.log('👥 Cargando lista de usuarios...');
